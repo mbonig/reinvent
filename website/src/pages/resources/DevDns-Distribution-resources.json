@@ -1,0 +1,8 @@
+{
+  "stackName": "DevDns-Distribution",
+  "resources": [
+    "AWS::Route53::RecordSet",
+    "AWS::Route53::RecordSet",
+    "AWS::CDK::Metadata"
+  ]
+}

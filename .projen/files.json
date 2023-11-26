@@ -15,6 +15,7 @@
     ".projen/tasks.json",
     "cdk.json",
     "LICENSE",
+    "src/constructs/WebsiteStackTest/WebsiteStackTest-function.ts",
     "tsconfig.dev.json",
     "tsconfig.json"
   ],

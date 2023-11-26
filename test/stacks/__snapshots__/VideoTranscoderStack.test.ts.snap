@@ -1,0 +1,2069 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VideoTranscoderStack Snapshot 1`] = `
+{
+  "Mappings": {
+    "ServiceprincipalMap": {
+      "af-south-1": {
+        "states": "states.af-south-1.amazonaws.com",
+      },
+      "ap-east-1": {
+        "states": "states.ap-east-1.amazonaws.com",
+      },
+      "ap-northeast-1": {
+        "states": "states.ap-northeast-1.amazonaws.com",
+      },
+      "ap-northeast-2": {
+        "states": "states.ap-northeast-2.amazonaws.com",
+      },
+      "ap-northeast-3": {
+        "states": "states.ap-northeast-3.amazonaws.com",
+      },
+      "ap-south-1": {
+        "states": "states.ap-south-1.amazonaws.com",
+      },
+      "ap-south-2": {
+        "states": "states.ap-south-2.amazonaws.com",
+      },
+      "ap-southeast-1": {
+        "states": "states.ap-southeast-1.amazonaws.com",
+      },
+      "ap-southeast-2": {
+        "states": "states.ap-southeast-2.amazonaws.com",
+      },
+      "ap-southeast-3": {
+        "states": "states.ap-southeast-3.amazonaws.com",
+      },
+      "ap-southeast-4": {
+        "states": "states.ap-southeast-4.amazonaws.com",
+      },
+      "ca-central-1": {
+        "states": "states.ca-central-1.amazonaws.com",
+      },
+      "cn-north-1": {
+        "states": "states.cn-north-1.amazonaws.com",
+      },
+      "cn-northwest-1": {
+        "states": "states.cn-northwest-1.amazonaws.com",
+      },
+      "eu-central-1": {
+        "states": "states.eu-central-1.amazonaws.com",
+      },
+      "eu-central-2": {
+        "states": "states.eu-central-2.amazonaws.com",
+      },
+      "eu-north-1": {
+        "states": "states.eu-north-1.amazonaws.com",
+      },
+      "eu-south-1": {
+        "states": "states.eu-south-1.amazonaws.com",
+      },
+      "eu-south-2": {
+        "states": "states.eu-south-2.amazonaws.com",
+      },
+      "eu-west-1": {
+        "states": "states.eu-west-1.amazonaws.com",
+      },
+      "eu-west-2": {
+        "states": "states.eu-west-2.amazonaws.com",
+      },
+      "eu-west-3": {
+        "states": "states.eu-west-3.amazonaws.com",
+      },
+      "il-central-1": {
+        "states": "states.il-central-1.amazonaws.com",
+      },
+      "me-central-1": {
+        "states": "states.me-central-1.amazonaws.com",
+      },
+      "me-south-1": {
+        "states": "states.me-south-1.amazonaws.com",
+      },
+      "sa-east-1": {
+        "states": "states.sa-east-1.amazonaws.com",
+      },
+      "us-east-1": {
+        "states": "states.us-east-1.amazonaws.com",
+      },
+      "us-east-2": {
+        "states": "states.us-east-2.amazonaws.com",
+      },
+      "us-gov-east-1": {
+        "states": "states.us-gov-east-1.amazonaws.com",
+      },
+      "us-gov-west-1": {
+        "states": "states.us-gov-west-1.amazonaws.com",
+      },
+      "us-iso-east-1": {
+        "states": "states.amazonaws.com",
+      },
+      "us-iso-west-1": {
+        "states": "states.amazonaws.com",
+      },
+      "us-isob-east-1": {
+        "states": "states.amazonaws.com",
+      },
+      "us-west-1": {
+        "states": "states.us-west-1.amazonaws.com",
+      },
+      "us-west-2": {
+        "states": "states.us-west-2.amazonaws.com",
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536": {
+      "DependsOn": [
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "my-bucket",
+          "S3Key": "my-key",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_CA_BUNDLE": "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem",
+          },
+        },
+        "Handler": "index.handler",
+        "Layers": [
+          {
+            "Ref": "TesterTestFileDeploymentAwsCliLayer8084A319",
+          },
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.9",
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+        "Roles": [
+          {
+            "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "5bc602ecde93c947efe5899ae355f999986a1acbe610b1c0b9c468d738857555.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TesterTestFileDeploymentAwsCliLayer8084A319": {
+      "Properties": {
+        "Content": {
+          "S3Bucket": "my-bucket",
+          "S3Key": "my-key",
+        },
+        "Description": "/opt/awscli/aws",
+      },
+      "Type": "AWS::Lambda::LayerVersion",
+    },
+    "TesterTestFileDeploymentCustomResource644807CB": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "DestinationBucketKeyPrefix": "test/",
+        "DestinationBucketName": {
+          "Fn::ImportValue": "TestStack:ExportsOutputRefMediaBucketBCBB02BA270A7AEB",
+        },
+        "Prune": true,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536",
+            "Arn",
+          ],
+        },
+        "SourceBucketNames": [
+          {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+        ],
+        "SourceObjectKeys": [
+          "cfe6490ee890d59d2bea5bd51da61e3c6dd524df5ffdc7acd8ea202e871f17cd.zip",
+        ],
+      },
+      "Type": "Custom::CDKBucketDeployment",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TesterTestingMachine249ED5B8": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "TesterTestingMachineRoleDefaultPolicy4832C2A4",
+        "TesterTestingMachineRoleB44EFBE7",
+      ],
+      "Properties": {
+        "DefinitionString": {
+          "Fn::Join": [
+            "",
+            [
+              "{"Comment":"A description of my state machine","StartAt":"CopyObject","States":{"CopyObject":{"Type":"Task","Parameters":{"Bucket":"",
+              {
+                "Fn::ImportValue": "TestStack:ExportsOutputRefMediaBucketBCBB02BA270A7AEB",
+              },
+              "","CopySource":"",
+              {
+                "Fn::ImportValue": "TestStack:ExportsOutputRefMediaBucketBCBB02BA270A7AEB",
+              },
+              "/test/test.mp4","Key":"uploads/test.mp4"},"Resource":"arn:aws:states:::aws-sdk:s3:copyObject","Next":"Wait"},"Wait":{"Type":"Wait","Seconds":60,"Next":"GetObjectAttributes"},"GetObjectAttributes":{"Type":"Task","Parameters":{"Bucket":"",
+              {
+                "Fn::ImportValue": "TestStack:ExportsOutputRefMediaBucketBCBB02BA270A7AEB",
+              },
+              "","Key":"converted/test.mp4","ObjectAttributes":["ETag"]},"Resource":"arn:aws:states:::aws-sdk:s3:getObjectAttributes","Next":"DeleteObjects"},"DeleteObjects":{"Type":"Task","End":true,"Parameters":{"Bucket":"",
+              {
+                "Fn::ImportValue": "TestStack:ExportsOutputRefMediaBucketBCBB02BA270A7AEB",
+              },
+              "","Delete":{"Objects":[{"Key":"converted/test.mp4"},{"Key":"uploads/test.mp4"}]}},"Resource":"arn:aws:states:::aws-sdk:s3:deleteObjects"}}}",
+            ],
+          ],
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "TesterTestingMachineRoleB44EFBE7",
+            "Arn",
+          ],
+        },
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::StepFunctions::StateMachine",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TesterTestingMachineRoleB44EFBE7": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::FindInMap": [
+                    "ServiceprincipalMap",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    "states",
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TesterTestingMachineRoleDefaultPolicy4832C2A4": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                      },
+                      "/test/test.mp4",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                      },
+                      "/uploads/test.mp4",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                      },
+                      "/converted/test.mp4",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "s3:DeleteObject*",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                    },
+                    "/uploads/test.mp4",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "s3:DeleteObject*",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                    },
+                    "/converted/test.mp4",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TesterTestingMachineRoleDefaultPolicy4832C2A4",
+        "Roles": [
+          {
+            "Ref": "TesterTestingMachineRoleB44EFBE7",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TesterTestsIsCompleteHandler43699701": {
+      "DependsOn": [
+        "TesterTestsIsCompleteHandlerServiceRoleDefaultPolicyFC1D5151",
+        "TesterTestsIsCompleteHandlerServiceRoleD8C56A9B",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "my-bucket",
+          "S3Key": "my-key",
+        },
+        "Environment": {
+          "Variables": {
+            "STATE_MACHINE_ARN": {
+              "Ref": "TesterTestsStateMachine8B6B417C",
+            },
+          },
+        },
+        "Handler": "intrinsic-validator-provider.isCompleteHandler",
+        "Role": {
+          "Fn::GetAtt": [
+            "TesterTestsIsCompleteHandlerServiceRoleD8C56A9B",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "TesterTestsIsCompleteHandlerLogRetention8A734071": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "TesterTestsIsCompleteHandler43699701",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "TesterTestsIsCompleteHandlerServiceRoleD8C56A9B": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TesterTestsIsCompleteHandlerServiceRoleDefaultPolicyFC1D5151": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "states:ListExecutions",
+                "states:ListStateMachines",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "TesterTestsStateMachine8B6B417C",
+              },
+            },
+            {
+              "Action": [
+                "states:DescribeExecution",
+                "states:DescribeStateMachineForExecution",
+                "states:GetExecutionHistory",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":states:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":execution:",
+                    {
+                      "Fn::Select": [
+                        6,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "TesterTestsStateMachine8B6B417C",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    ":*",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "states:ListActivities",
+                "states:DescribeStateMachine",
+                "states:DescribeActivity",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TesterTestsIsCompleteHandlerServiceRoleDefaultPolicyFC1D5151",
+        "Roles": [
+          {
+            "Ref": "TesterTestsIsCompleteHandlerServiceRoleD8C56A9B",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TesterTestsOnEventHandler3A27D66C": {
+      "DependsOn": [
+        "TesterTestsOnEventHandlerServiceRoleDefaultPolicyEB30F870",
+        "TesterTestsOnEventHandlerServiceRole36F953E6",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "my-bucket",
+          "S3Key": "my-key",
+        },
+        "Environment": {
+          "Variables": {
+            "STATE_MACHINE_ARN": {
+              "Ref": "TesterTestsStateMachine8B6B417C",
+            },
+          },
+        },
+        "Handler": "intrinsic-validator-provider.onEventHandler",
+        "Role": {
+          "Fn::GetAtt": [
+            "TesterTestsOnEventHandlerServiceRole36F953E6",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "TesterTestsOnEventHandlerLogRetention1331A03D": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "TesterTestsOnEventHandler3A27D66C",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "TesterTestsOnEventHandlerServiceRole36F953E6": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TesterTestsOnEventHandlerServiceRoleDefaultPolicyEB30F870": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "states:StartExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "TesterTestsStateMachine8B6B417C",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TesterTestsOnEventHandlerServiceRoleDefaultPolicyEB30F870",
+        "Roles": [
+          {
+            "Ref": "TesterTestsOnEventHandlerServiceRole36F953E6",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TesterTestsProviderframeworkisComplete1488F88A": {
+      "DependsOn": [
+        "TesterTestsProviderframeworkisCompleteServiceRoleDefaultPolicy5AEEC3DA",
+        "TesterTestsProviderframeworkisCompleteServiceRole68E80BA6",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "my-bucket",
+          "S3Key": "my-key",
+        },
+        "Description": "AWS CDK resource provider framework - isComplete (test/Tester/Tests/Provider)",
+        "Environment": {
+          "Variables": {
+            "USER_IS_COMPLETE_FUNCTION_ARN": {
+              "Fn::GetAtt": [
+                "TesterTestsIsCompleteHandler43699701",
+                "Arn",
+              ],
+            },
+            "USER_ON_EVENT_FUNCTION_ARN": {
+              "Fn::GetAtt": [
+                "TesterTestsOnEventHandler3A27D66C",
+                "Arn",
+              ],
+            },
+          },
+        },
+        "Handler": "framework.isComplete",
+        "Role": {
+          "Fn::GetAtt": [
+            "TesterTestsProviderframeworkisCompleteServiceRole68E80BA6",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "TesterTestsProviderframeworkisCompleteLogRetention9E9FE267": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "TesterTestsProviderframeworkisComplete1488F88A",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "TesterTestsProviderframeworkisCompleteServiceRole68E80BA6": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TesterTestsProviderframeworkisCompleteServiceRoleDefaultPolicy5AEEC3DA": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "TesterTestsOnEventHandler3A27D66C",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "TesterTestsOnEventHandler3A27D66C",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "TesterTestsIsCompleteHandler43699701",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "TesterTestsIsCompleteHandler43699701",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TesterTestsProviderframeworkisCompleteServiceRoleDefaultPolicy5AEEC3DA",
+        "Roles": [
+          {
+            "Ref": "TesterTestsProviderframeworkisCompleteServiceRole68E80BA6",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TesterTestsProviderframeworkonEventEAD32E47": {
+      "DependsOn": [
+        "TesterTestsProviderframeworkonEventServiceRoleDefaultPolicyB044D708",
+        "TesterTestsProviderframeworkonEventServiceRole15D64904",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "my-bucket",
+          "S3Key": "my-key",
+        },
+        "Description": "AWS CDK resource provider framework - onEvent (test/Tester/Tests/Provider)",
+        "Environment": {
+          "Variables": {
+            "USER_IS_COMPLETE_FUNCTION_ARN": {
+              "Fn::GetAtt": [
+                "TesterTestsIsCompleteHandler43699701",
+                "Arn",
+              ],
+            },
+            "USER_ON_EVENT_FUNCTION_ARN": {
+              "Fn::GetAtt": [
+                "TesterTestsOnEventHandler3A27D66C",
+                "Arn",
+              ],
+            },
+            "WAITER_STATE_MACHINE_ARN": {
+              "Ref": "TesterTestsProviderwaiterstatemachine7E5EAE02",
+            },
+          },
+        },
+        "Handler": "framework.onEvent",
+        "Role": {
+          "Fn::GetAtt": [
+            "TesterTestsProviderframeworkonEventServiceRole15D64904",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "TesterTestsProviderframeworkonEventLogRetentionF76DB184": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "TesterTestsProviderframeworkonEventEAD32E47",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "TesterTestsProviderframeworkonEventServiceRole15D64904": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TesterTestsProviderframeworkonEventServiceRoleDefaultPolicyB044D708": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "TesterTestsOnEventHandler3A27D66C",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "TesterTestsOnEventHandler3A27D66C",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "TesterTestsIsCompleteHandler43699701",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "TesterTestsIsCompleteHandler43699701",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "states:StartExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "TesterTestsProviderwaiterstatemachine7E5EAE02",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TesterTestsProviderframeworkonEventServiceRoleDefaultPolicyB044D708",
+        "Roles": [
+          {
+            "Ref": "TesterTestsProviderframeworkonEventServiceRole15D64904",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TesterTestsProviderframeworkonTimeoutCACDEA8B": {
+      "DependsOn": [
+        "TesterTestsProviderframeworkonTimeoutServiceRoleDefaultPolicy9A4E7BC0",
+        "TesterTestsProviderframeworkonTimeoutServiceRole4764D3E3",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "my-bucket",
+          "S3Key": "my-key",
+        },
+        "Description": "AWS CDK resource provider framework - onTimeout (test/Tester/Tests/Provider)",
+        "Environment": {
+          "Variables": {
+            "USER_IS_COMPLETE_FUNCTION_ARN": {
+              "Fn::GetAtt": [
+                "TesterTestsIsCompleteHandler43699701",
+                "Arn",
+              ],
+            },
+            "USER_ON_EVENT_FUNCTION_ARN": {
+              "Fn::GetAtt": [
+                "TesterTestsOnEventHandler3A27D66C",
+                "Arn",
+              ],
+            },
+          },
+        },
+        "Handler": "framework.onTimeout",
+        "Role": {
+          "Fn::GetAtt": [
+            "TesterTestsProviderframeworkonTimeoutServiceRole4764D3E3",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "TesterTestsProviderframeworkonTimeoutLogRetention8E5CC5F6": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "TesterTestsProviderframeworkonTimeoutCACDEA8B",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "TesterTestsProviderframeworkonTimeoutServiceRole4764D3E3": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TesterTestsProviderframeworkonTimeoutServiceRoleDefaultPolicy9A4E7BC0": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "TesterTestsOnEventHandler3A27D66C",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "TesterTestsOnEventHandler3A27D66C",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "TesterTestsIsCompleteHandler43699701",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "TesterTestsIsCompleteHandler43699701",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TesterTestsProviderframeworkonTimeoutServiceRoleDefaultPolicy9A4E7BC0",
+        "Roles": [
+          {
+            "Ref": "TesterTestsProviderframeworkonTimeoutServiceRole4764D3E3",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TesterTestsProviderwaiterstatemachine7E5EAE02": {
+      "DependsOn": [
+        "TesterTestsProviderwaiterstatemachineRoleDefaultPolicyC87B3213",
+        "TesterTestsProviderwaiterstatemachineRole412ACA06",
+      ],
+      "Properties": {
+        "DefinitionString": {
+          "Fn::Join": [
+            "",
+            [
+              "{"StartAt":"framework-isComplete-task","States":{"framework-isComplete-task":{"End":true,"Retry":[{"ErrorEquals":["States.ALL"],"IntervalSeconds":5,"MaxAttempts":360,"BackoffRate":1}],"Catch":[{"ErrorEquals":["States.ALL"],"Next":"framework-onTimeout-task"}],"Type":"Task","Resource":"",
+              {
+                "Fn::GetAtt": [
+                  "TesterTestsProviderframeworkisComplete1488F88A",
+                  "Arn",
+                ],
+              },
+              ""},"framework-onTimeout-task":{"End":true,"Type":"Task","Resource":"",
+              {
+                "Fn::GetAtt": [
+                  "TesterTestsProviderframeworkonTimeoutCACDEA8B",
+                  "Arn",
+                ],
+              },
+              ""}}}",
+            ],
+          ],
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "TesterTestsProviderwaiterstatemachineRole412ACA06",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::StepFunctions::StateMachine",
+    },
+    "TesterTestsProviderwaiterstatemachineRole412ACA06": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::FindInMap": [
+                    "ServiceprincipalMap",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    "states",
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TesterTestsProviderwaiterstatemachineRoleDefaultPolicyC87B3213": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "TesterTestsProviderframeworkisComplete1488F88A",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "TesterTestsProviderframeworkisComplete1488F88A",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "TesterTestsProviderframeworkonTimeoutCACDEA8B",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "TesterTestsProviderframeworkonTimeoutCACDEA8B",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TesterTestsProviderwaiterstatemachineRoleDefaultPolicyC87B3213",
+        "Roles": [
+          {
+            "Ref": "TesterTestsProviderwaiterstatemachineRole412ACA06",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TesterTestsResource435990082164B8B": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "TesterTestsProviderframeworkonEventEAD32E47",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::CustomResource",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TesterTestsStateMachine8B6B417C": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "TesterTestsStateMachineRoleDefaultPolicyC765736A",
+        "TesterTestsStateMachineRoleB467DD4F",
+      ],
+      "Properties": {
+        "DefinitionString": {
+          "Fn::Join": [
+            "",
+            [
+              "{"StartAt":"Validations","States":{"Validations":{"Type":"Parallel","End":true,"Branches":[{"StartAt":"[0] StateMachineExecutionSucceeds","States":{"[0] StateMachineExecutionSucceeds":{"End":true,"Catch":[{"ErrorEquals":["States.ALL"],"Next":"[0] StateMachineExecutionSucceeds - Alarming"}],"Type":"Task","Resource":"arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":states:::states:startExecution.sync:2","Parameters":{"Input.$":"$","StateMachineArn":"",
+              {
+                "Ref": "TesterTestingMachine249ED5B8",
+              },
+              ""}},"[0] StateMachineExecutionSucceeds - Alarming":{"Type":"Fail","Error":"ExecutionFailed","Cause":"",
+              {
+                "Ref": "TesterTestingMachine249ED5B8",
+              },
+              " failed to execute"}}}]}}}",
+            ],
+          ],
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "TesterTestsStateMachineRoleB467DD4F",
+            "Arn",
+          ],
+        },
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::StepFunctions::StateMachine",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TesterTestsStateMachineRoleB467DD4F": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::FindInMap": [
+                    "ServiceprincipalMap",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    "states",
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TesterTestsStateMachineRoleDefaultPolicyC765736A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "states:StartExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "TesterTestingMachine249ED5B8",
+              },
+            },
+            {
+              "Action": [
+                "states:DescribeExecution",
+                "states:StopExecution",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":states:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":execution:",
+                    {
+                      "Fn::Select": [
+                        6,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "TesterTestingMachine249ED5B8",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    "*",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "events:PutTargets",
+                "events:PutRule",
+                "events:DescribeRule",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":events:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":rule/StepFunctionsGetEventsForStepFunctionsExecutionRule",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TesterTestsStateMachineRoleDefaultPolicyC765736A",
+        "Roles": [
+          {
+            "Ref": "TesterTestsStateMachineRoleB467DD4F",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "VideoTranscoderMediaConvertRole384F4EEB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "mediaconvert.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "VideoTranscoderMediaConvertRoleDefaultPolicy2F87BAEA": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                      },
+                      "/uploads/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::ImportValue": "TestStack:ExportsOutputFnGetAttMediaBucketBCBB02BAArnB94B784B",
+                      },
+                      "/converted/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "VideoTranscoderMediaConvertRoleDefaultPolicy2F87BAEA",
+        "Roles": [
+          {
+            "Ref": "VideoTranscoderMediaConvertRole384F4EEB",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "VideoTranscoderSourceBucketTrigger341F7E00": {
+      "Properties": {
+        "EventPattern": {
+          "detail": {
+            "bucket": {
+              "name": [
+                {
+                  "Fn::ImportValue": "TestStack:ExportsOutputRefMediaBucketBCBB02BA270A7AEB",
+                },
+              ],
+            },
+            "object": {
+              "key": [
+                {
+                  "prefix": "uploads/",
+                },
+              ],
+            },
+          },
+          "detail-type": [
+            "Object Created",
+          ],
+          "source": [
+            "aws.s3",
+          ],
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "VideoTranscoderTriggerTranscodingD9B659DB",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "VideoTranscoderSourceBucketTriggerAllowEventRuletestVideoTranscoderTriggerTranscoding4282F02CFEFFF63F": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "VideoTranscoderTriggerTranscodingD9B659DB",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "VideoTranscoderSourceBucketTrigger341F7E00",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "VideoTranscoderTriggerTranscodingD9B659DB": {
+      "DependsOn": [
+        "VideoTranscoderTriggerTranscodingServiceRoleDefaultPolicyC81CF872",
+        "VideoTranscoderTriggerTranscodingServiceRoleFD1908E7",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "my-bucket",
+          "S3Key": "my-key",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "MEDIA_CONVERT_ROLE_ARN": {
+              "Fn::GetAtt": [
+                "VideoTranscoderMediaConvertRole384F4EEB",
+                "Arn",
+              ],
+            },
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "VideoTranscoderTriggerTranscodingServiceRoleFD1908E7",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs16.x",
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "VideoTranscoderTriggerTranscodingServiceRoleDefaultPolicyC81CF872": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "mediaconvert:DescribeEndpoints",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:mediaconvert:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":endpoints/*",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "mediaconvert:CreateJob",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":mediaconvert:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":queues/Default",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "VideoTranscoderMediaConvertRole384F4EEB",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "VideoTranscoderTriggerTranscodingServiceRoleDefaultPolicyC81CF872",
+        "Roles": [
+          {
+            "Ref": "VideoTranscoderTriggerTranscodingServiceRoleFD1908E7",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "VideoTranscoderTriggerTranscodingServiceRoleFD1908E7": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "video-transcoder",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

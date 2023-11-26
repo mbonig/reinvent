@@ -1,23 +1,43 @@
-import { App, Stack, StackProps } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-
-export class MyStack extends Stack {
-  constructor(scope: Construct, id: string, props: StackProps = {}) {
-    super(scope, id, props);
-
-    // define resources here...
-  }
-}
-
-// for development, use account/region from cdk cli
-const devEnv = {
-  account: process.env.CDK_DEFAULT_ACCOUNT,
-  region: process.env.CDK_DEFAULT_REGION,
-};
+import path from 'path';
+import { App } from 'aws-cdk-lib';
+import { AssetImage } from 'aws-cdk-lib/aws-ecs';
+import { CONNECTION_ARN, MANAGEMENT_ACCOUNT, PRIMARY_REGION } from './constants';
+import { PipelineStack } from './stacks/PipelineStack';
 
 const app = new App();
 
-new MyStack(app, 'reinvent-dev', { env: devEnv });
-// new MyStack(app, 'reinvent-prod', { env: prodEnv });
+const websiteImageAsset = AssetImage.fromAsset(path.join(__dirname, '..', 'website'));
+
+new PipelineStack(app, 'Reinvent', {
+  env: {
+    account: MANAGEMENT_ACCOUNT,
+    region: PRIMARY_REGION,
+  },
+  websiteImageAsset,
+  connectionArn: CONNECTION_ARN,
+  replicationRoleArn: 'arn:aws:iam::536309290949:role/BucketReplication-ReplicationRoleCE149CEC-tZp8bWrelieK',
+});
+
+// Aspects.of(app).add(new AwsSolutionsChecks());
+
+/*
+new GithubPipelineStack(app, 'Reinvent', {
+  env: {
+    account: MANAGEMENT_ACCOUNT,
+    region: PRIMARY_REGION,
+  },
+  websiteImageAsset,
+  githubActionRoleArn: 'arn:aws:iam::536309290949:role/DevGithubSupport-UploadRole66CFAE20-ZUP5RUPPWFC0',
+});
+*/
 
 app.synth();
+
+
+/*
+
+const app = new App({
+  defaultStackSynthesizer: new HeroesSynthesizer({ path: './website/pages/resources' }),
+});
+
+ */

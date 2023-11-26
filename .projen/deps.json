@@ -21,7 +21,7 @@
     },
     {
       "name": "aws-cdk",
-      "version": "^2.1.0",
+      "version": "^2.99.1",
       "type": "build"
     },
     {
@@ -76,13 +76,89 @@
       "type": "build"
     },
     {
+      "name": "@aws-cdk/integ-runner",
+      "version": "latest",
+      "type": "devenv"
+    },
+    {
+      "name": "@aws-cdk/integ-tests-alpha",
+      "version": "latest",
+      "type": "devenv"
+    },
+    {
+      "name": "@aws-cdk/aws-lambda-python-alpha",
+      "version": "^2.93.0-alpha.0",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/client-dynamodb",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/lib-dynamodb",
+      "type": "runtime"
+    },
+    {
+      "name": "@cdktf/aws-cdk",
+      "type": "runtime"
+    },
+    {
+      "name": "@matthewbonig/cdk-logical-id-mapper",
+      "type": "runtime"
+    },
+    {
+      "name": "@matthewbonig/state-machine",
+      "type": "runtime"
+    },
+    {
+      "name": "@types/node",
+      "version": "^18",
+      "type": "runtime"
+    },
+    {
+      "name": "@types/uuid",
+      "type": "runtime"
+    },
+    {
+      "name": "@wheatstalk/cdk-intrinsic-validator",
+      "type": "runtime"
+    },
+    {
+      "name": "aws-cdk-github-oidc",
+      "type": "runtime"
+    },
+    {
       "name": "aws-cdk-lib",
-      "version": "^2.1.0",
+      "version": "^2.99.1",
+      "type": "runtime"
+    },
+    {
+      "name": "aws-sdk",
+      "type": "runtime"
+    },
+    {
+      "name": "cdk-iam-floyd",
+      "type": "runtime"
+    },
+    {
+      "name": "cdk-nag",
+      "type": "runtime"
+    },
+    {
+      "name": "cdk-pipelines-github",
       "type": "runtime"
     },
     {
       "name": "constructs",
       "version": "^10.0.5",
+      "type": "runtime"
+    },
+    {
+      "name": "datadog-cdk-constructs-v2",
+      "type": "runtime"
+    },
+    {
+      "name": "uuid",
       "type": "runtime"
     }
   ],

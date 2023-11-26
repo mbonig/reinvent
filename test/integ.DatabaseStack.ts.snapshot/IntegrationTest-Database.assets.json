@@ -1,0 +1,20 @@
+{
+  "version": "34.0.0",
+  "files": {
+    "f66fb0dbfe893d8119f3a8c91c5cb980a42e956bd3fdbc85a35ea3f765574e68": {
+      "source": {
+        "path": "IntegrationTest-Database.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "536309290949-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-536309290949-us-east-1",
+          "objectKey": "f66fb0dbfe893d8119f3a8c91c5cb980a42e956bd3fdbc85a35ea3f765574e68.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::536309290949:role/cdk-hnb659fds-file-publishing-role-536309290949-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

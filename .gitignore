@@ -51,3 +51,4 @@ junit.xml
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
+!/src/constructs/WebsiteStackTest/WebsiteStackTest-function.ts

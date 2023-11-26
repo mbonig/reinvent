@@ -1,0 +1,1150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WebsiteStack Snapshot 1`] = `
+{
+  "Outputs": {
+    "ServiceLoadBalancerDNSEC5B149E": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ServiceLBE9A1ADBC",
+          "DNSName",
+        ],
+      },
+    },
+    "ServiceServiceURL250C0FB6": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "ServiceDNS57754DD9",
+            },
+          ],
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "AWSCDKTriggerCustomResourceProviderCustomResourceProviderHandler97BECD91": {
+      "DependsOn": [
+        "AWSCDKTriggerCustomResourceProviderCustomResourceProviderRoleE18FAF0A",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-000011112222-us-east-1",
+          "S3Key": "30d27607a2f6a97cb964228693797269365769d596600286bcb294bbb3b1844d.zip",
+        },
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
+        "Role": {
+          "Fn::GetAtt": [
+            "AWSCDKTriggerCustomResourceProviderCustomResourceProviderRoleE18FAF0A",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "AWSCDKTriggerCustomResourceProviderCustomResourceProviderRoleE18FAF0A": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+          },
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "lambda:InvokeFunction",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          {
+                            "Fn::GetAtt": [
+                              "UrlPingTestWebsiteStackTestFunction396DF0FE",
+                              "Arn",
+                            ],
+                          },
+                          ":*",
+                        ],
+                      ],
+                    },
+                  ],
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Inline",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691": {
+      "DependsOn": [
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+      ],
+      "Properties": {
+        "Code": {
+          "ZipFile": "import boto3  # type: ignore
+import json
+import logging
+import urllib.request
+
+s3 = boto3.client("s3")
+
+EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
+
+CONFIGURATION_TYPES = ["TopicConfigurations", "QueueConfigurations", "LambdaFunctionConfigurations"]
+
+def handler(event: dict, context):
+  response_status = "SUCCESS"
+  error_message = ""
+  try:
+    props = event["ResourceProperties"]
+    bucket = props["BucketName"]
+    notification_configuration = props["NotificationConfiguration"]
+    request_type = event["RequestType"]
+    managed = props.get('Managed', 'true').lower() == 'true'
+    stack_id = event['StackId']
+
+    if managed:
+      config = handle_managed(request_type, notification_configuration)
+    else:
+      config = handle_unmanaged(bucket, stack_id, request_type, notification_configuration)
+
+    put_bucket_notification_configuration(bucket, config)
+  except Exception as e:
+    logging.exception("Failed to put bucket notification configuration")
+    response_status = "FAILED"
+    error_message = f"Error: {str(e)}. "
+  finally:
+    submit_response(event, context, response_status, error_message)
+
+def handle_managed(request_type, notification_configuration):
+  if request_type == 'Delete':
+    return {}
+  return notification_configuration
+
+def handle_unmanaged(bucket, stack_id, request_type, notification_configuration):
+  external_notifications = find_external_notifications(bucket, stack_id)
+
+  if request_type == 'Delete':
+    return external_notifications
+
+  def with_id(notification):
+    notification['Id'] = f"{stack_id}-{hash(json.dumps(notification, sort_keys=True))}"
+    return notification
+
+  notifications = {}
+  for t in CONFIGURATION_TYPES:
+    external = external_notifications.get(t, [])
+    incoming = [with_id(n) for n in notification_configuration.get(t, [])]
+    notifications[t] = external + incoming
+
+  if EVENTBRIDGE_CONFIGURATION in notification_configuration:
+    notifications[EVENTBRIDGE_CONFIGURATION] = notification_configuration[EVENTBRIDGE_CONFIGURATION]
+  elif EVENTBRIDGE_CONFIGURATION in external_notifications:
+    notifications[EVENTBRIDGE_CONFIGURATION] = external_notifications[EVENTBRIDGE_CONFIGURATION]
+
+  return notifications
+
+def find_external_notifications(bucket, stack_id):
+  existing_notifications = get_bucket_notification_configuration(bucket)
+  external_notifications = {}
+  for t in CONFIGURATION_TYPES:
+    external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f"{stack_id}-")]
+
+  if EVENTBRIDGE_CONFIGURATION in existing_notifications:
+    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
+
+  return external_notifications
+
+def get_bucket_notification_configuration(bucket):
+  return s3.get_bucket_notification_configuration(Bucket=bucket)
+
+def put_bucket_notification_configuration(bucket, notification_configuration):
+  s3.put_bucket_notification_configuration(Bucket=bucket, NotificationConfiguration=notification_configuration)
+
+def submit_response(event: dict, context, response_status: str, error_message: str):
+  response_body = json.dumps(
+    {
+      "Status": response_status,
+      "Reason": f"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}",
+      "PhysicalResourceId": event.get("PhysicalResourceId") or event["LogicalResourceId"],
+      "StackId": event["StackId"],
+      "RequestId": event["RequestId"],
+      "LogicalResourceId": event["LogicalResourceId"],
+      "NoEcho": False,
+    }
+  ).encode("utf-8")
+  headers = {"content-type": "", "content-length": str(len(response_body))}
+  try:
+    req = urllib.request.Request(url=event["ResponseURL"], headers=headers, data=response_body, method="PUT")
+    with urllib.request.urlopen(req) as response:
+      print(response.read().decode("utf-8"))
+    print("Status code: " + response.reason)
+  except Exception as e:
+      print("send(..) failed executing request.urlopen(..): " + str(e))
+",
+        },
+        "Description": "AWS CloudFormation handler for "Custom::S3BucketNotifications" resources (@aws-cdk/aws-s3)",
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.9",
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+        "Timeout": 300,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:PutBucketNotification",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "Roles": [
+          {
+            "Ref": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "Certificate4E7ABB08": {
+      "Properties": {
+        "DomainName": "test.matthewbonig.com",
+        "DomainValidationOptions": [
+          {
+            "DomainName": "test.matthewbonig.com",
+            "HostedZoneId": "DUMMY",
+          },
+          {
+            "DomainName": "test-us-east-1.matthewbonig.com",
+            "HostedZoneId": "DUMMY",
+          },
+        ],
+        "SubjectAlternativeNames": [
+          "test-us-east-1.matthewbonig.com",
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test/Certificate",
+          },
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+        "ValidationMethod": "DNS",
+      },
+      "Type": "AWS::CertificateManager::Certificate",
+    },
+    "ClusterEB0386A7": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::Cluster",
+    },
+    "MediaBucketBCBB02BA": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "BucketName": "test-media-us-east-1",
+        "ReplicationConfiguration": {
+          "Role": "arn:aws:iam::000011112222:role/BucketReplication-ReplicationRoleCE149CEC-tZp8bWrelieK",
+          "Rules": [
+            {
+              "Destination": {
+                "Bucket": "arn:aws:s3:::test-media-us-west-2",
+                "StorageClass": "STANDARD",
+              },
+              "Id": "ConvertedReplicationRule",
+              "Prefix": "converted/",
+              "Status": "Enabled",
+            },
+          ],
+        },
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled",
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "MediaBucketNotifications36AC1320": {
+      "Properties": {
+        "BucketName": {
+          "Ref": "MediaBucketBCBB02BA",
+        },
+        "Managed": true,
+        "NotificationConfiguration": {
+          "EventBridgeConfiguration": {},
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::S3BucketNotifications",
+    },
+    "Service9571FDD8": {
+      "DependsOn": [
+        "ServiceLBPublicListenerECSGroup0CC8688C",
+        "ServiceLBPublicListener46709EAA",
+        "ServiceTaskDefTaskRoleDefaultPolicy9CCB4F8E",
+        "ServiceTaskDefTaskRole0CFE2F57",
+      ],
+      "Properties": {
+        "Cluster": {
+          "Ref": "ClusterEB0386A7",
+        },
+        "DeploymentConfiguration": {
+          "Alarms": {
+            "AlarmNames": [],
+            "Enable": false,
+            "Rollback": false,
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
+        },
+        "DesiredCount": 2,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 180,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": [
+          {
+            "ContainerName": "web",
+            "ContainerPort": 3000,
+            "TargetGroupArn": {
+              "Ref": "ServiceLBPublicListenerECSGroup0CC8688C",
+            },
+          },
+        ],
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "ServiceSecurityGroupEEA09B68",
+                  "GroupId",
+                ],
+              },
+            ],
+            "Subnets": [
+              {
+                "Fn::ImportValue": "VpcTestStack:ExportsOutputRefVpcPrivateSubnet1Subnet536B997AFD4CC940",
+              },
+              {
+                "Fn::ImportValue": "VpcTestStack:ExportsOutputRefVpcPrivateSubnet2Subnet3788AAA1380949A3",
+              },
+              {
+                "Fn::ImportValue": "VpcTestStack:ExportsOutputRefVpcPrivateSubnet3SubnetF258B56EC7CF32DD",
+              },
+            ],
+          },
+        },
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+        "TaskDefinition": {
+          "Ref": "ServiceTaskDef1922A00F",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "ServiceDNS57754DD9": {
+      "Properties": {
+        "AliasTarget": {
+          "DNSName": {
+            "Fn::Join": [
+              "",
+              [
+                "dualstack.",
+                {
+                  "Fn::GetAtt": [
+                    "ServiceLBE9A1ADBC",
+                    "DNSName",
+                  ],
+                },
+              ],
+            ],
+          },
+          "HostedZoneId": {
+            "Fn::GetAtt": [
+              "ServiceLBE9A1ADBC",
+              "CanonicalHostedZoneID",
+            ],
+          },
+        },
+        "HostedZoneId": "DUMMY",
+        "Name": "test-us-east-1.matthewbonig.com.",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "ServiceLBE9A1ADBC": {
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
+        "Scheme": "internet-facing",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "ServiceLBSecurityGroupF7435A5C",
+              "GroupId",
+            ],
+          },
+        ],
+        "Subnets": [
+          {
+            "Fn::ImportValue": "VpcTestStack:ExportsOutputRefVpcPublicSubnet1Subnet5C2D37C4FFA2B456",
+          },
+          {
+            "Fn::ImportValue": "VpcTestStack:ExportsOutputRefVpcPublicSubnet2Subnet691E08A351552740",
+          },
+          {
+            "Fn::ImportValue": "VpcTestStack:ExportsOutputRefVpcPublicSubnet3SubnetBE12F0B65CC33245",
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "ServiceLBPublicListener46709EAA": {
+      "Properties": {
+        "Certificates": [
+          {
+            "CertificateArn": {
+              "Ref": "Certificate4E7ABB08",
+            },
+          },
+        ],
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "ServiceLBPublicListenerECSGroup0CC8688C",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": {
+          "Ref": "ServiceLBE9A1ADBC",
+        },
+        "Port": 443,
+        "Protocol": "HTTPS",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "ServiceLBPublicListenerECSGroup0CC8688C": {
+      "Properties": {
+        "Port": 80,
+        "Protocol": "HTTP",
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+        "TargetGroupAttributes": [
+          {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
+        ],
+        "TargetType": "ip",
+        "VpcId": {
+          "Fn::ImportValue": "VpcTestStack:ExportsOutputRefVpc8378EB38272D6E3A",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "ServiceLBPublicRedirectListenerF055B333": {
+      "Properties": {
+        "DefaultActions": [
+          {
+            "RedirectConfig": {
+              "Port": "443",
+              "Protocol": "HTTPS",
+              "StatusCode": "HTTP_301",
+            },
+            "Type": "redirect",
+          },
+        ],
+        "LoadBalancerArn": {
+          "Ref": "ServiceLBE9A1ADBC",
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "ServiceLBSecurityGroupF7435A5C": {
+      "Properties": {
+        "GroupDescription": "Automatically created Security Group for ELB testServiceLB586D6618",
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 443",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+        "VpcId": {
+          "Fn::ImportValue": "VpcTestStack:ExportsOutputRefVpc8378EB38272D6E3A",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ServiceLBSecurityGrouptotestServiceSecurityGroup5150CB513000DAF9066D": {
+      "Properties": {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "ServiceSecurityGroupEEA09B68",
+            "GroupId",
+          ],
+        },
+        "FromPort": 3000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "ServiceLBSecurityGroupF7435A5C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
+    "ServiceSecurityGroupEEA09B68": {
+      "DependsOn": [
+        "ServiceTaskDefTaskRoleDefaultPolicy9CCB4F8E",
+        "ServiceTaskDefTaskRole0CFE2F57",
+      ],
+      "Properties": {
+        "GroupDescription": "test/Service/Service/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+        "VpcId": {
+          "Fn::ImportValue": "VpcTestStack:ExportsOutputRefVpc8378EB38272D6E3A",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ServiceSecurityGroupfromtestServiceLBSecurityGroup070396493000AE530363": {
+      "DependsOn": [
+        "ServiceTaskDefTaskRoleDefaultPolicy9CCB4F8E",
+        "ServiceTaskDefTaskRole0CFE2F57",
+      ],
+      "Properties": {
+        "Description": "Load balancer to target",
+        "FromPort": 3000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "ServiceSecurityGroupEEA09B68",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "ServiceLBSecurityGroupF7435A5C",
+            "GroupId",
+          ],
+        },
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "ServiceTaskDef1922A00F": {
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "MEDIA_BUCKET",
+                "Value": {
+                  "Ref": "MediaBucketBCBB02BA",
+                },
+              },
+            ],
+            "Essential": true,
+            "Image": "whatever",
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "ServiceTaskDefwebLogGroup2A898F61",
+                },
+                "awslogs-region": "us-east-1",
+                "awslogs-stream-prefix": "Service",
+              },
+            },
+            "Name": "web",
+            "PortMappings": [
+              {
+                "ContainerPort": 3000,
+                "Protocol": "tcp",
+              },
+            ],
+          },
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "ServiceTaskDefExecutionRole919F7BE3",
+            "Arn",
+          ],
+        },
+        "Family": "testServiceTaskDef70FA6280",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE",
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "ServiceTaskDefTaskRole0CFE2F57",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "ServiceTaskDefExecutionRole919F7BE3": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ServiceTaskDefExecutionRoleDefaultPolicy3073559D": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ServiceTaskDefwebLogGroup2A898F61",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ServiceTaskDefExecutionRoleDefaultPolicy3073559D",
+        "Roles": [
+          {
+            "Ref": "ServiceTaskDefExecutionRole919F7BE3",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ServiceTaskDefTaskRole0CFE2F57": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ServiceTaskDefTaskRoleDefaultPolicy9CCB4F8E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "MediaBucketBCBB02BA",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "MediaBucketBCBB02BA",
+                          "Arn",
+                        ],
+                      },
+                      "/uploads/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "MediaBucketBCBB02BA",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "MediaBucketBCBB02BA",
+                          "Arn",
+                        ],
+                      },
+                      "/media/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":dynamodb:us-east-1:000011112222:table/test-Heroes",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ServiceTaskDefTaskRoleDefaultPolicy9CCB4F8E",
+        "Roles": [
+          {
+            "Ref": "ServiceTaskDefTaskRole0CFE2F57",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ServiceTaskDefwebLogGroup2A898F61": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "UrlPingTestE1169BF6": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "ServiceDNS57754DD9",
+        "ServiceLBPublicListenerECSGroup0CC8688C",
+        "ServiceLBPublicListener46709EAA",
+        "ServiceLBPublicRedirectListenerF055B333",
+        "ServiceLBE9A1ADBC",
+        "ServiceLBSecurityGroupF7435A5C",
+        "ServiceLBSecurityGrouptotestServiceSecurityGroup5150CB513000DAF9066D",
+        "ServiceSecurityGroupfromtestServiceLBSecurityGroup070396493000AE530363",
+        "ServiceSecurityGroupEEA09B68",
+        "Service9571FDD8",
+        "ServiceTaskDefExecutionRoleDefaultPolicy3073559D",
+        "ServiceTaskDefExecutionRole919F7BE3",
+        "ServiceTaskDef1922A00F",
+        "ServiceTaskDefTaskRoleDefaultPolicy9CCB4F8E",
+        "ServiceTaskDefTaskRole0CFE2F57",
+        "ServiceTaskDefwebLogGroup2A898F61",
+      ],
+      "Properties": {
+        "ExecuteOnHandlerChange": true,
+        "HandlerArn": {
+          "Ref": "UrlPingTestWebsiteStackTestFunctionCurrentVersionB2F14C76cc9bdb3181fb0758cf8605dbec4873fe",
+        },
+        "InvocationType": "RequestResponse",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWSCDKTriggerCustomResourceProviderCustomResourceProviderHandler97BECD91",
+            "Arn",
+          ],
+        },
+        "Timeout": "600000",
+      },
+      "Type": "Custom::Trigger",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "UrlPingTestWebsiteStackTestFunction396DF0FE": {
+      "DependsOn": [
+        "ServiceDNS57754DD9",
+        "ServiceLBPublicListenerECSGroup0CC8688C",
+        "ServiceLBPublicListener46709EAA",
+        "ServiceLBPublicRedirectListenerF055B333",
+        "ServiceLBE9A1ADBC",
+        "ServiceLBSecurityGroupF7435A5C",
+        "ServiceLBSecurityGrouptotestServiceSecurityGroup5150CB513000DAF9066D",
+        "ServiceSecurityGroupfromtestServiceLBSecurityGroup070396493000AE530363",
+        "ServiceSecurityGroupEEA09B68",
+        "Service9571FDD8",
+        "ServiceTaskDefExecutionRoleDefaultPolicy3073559D",
+        "ServiceTaskDefExecutionRole919F7BE3",
+        "ServiceTaskDef1922A00F",
+        "ServiceTaskDefTaskRoleDefaultPolicy9CCB4F8E",
+        "ServiceTaskDefTaskRole0CFE2F57",
+        "ServiceTaskDefwebLogGroup2A898F61",
+        "UrlPingTestWebsiteStackTestFunctionServiceRole15EF1E4A",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "my-bucket",
+          "S3Key": "my-key",
+        },
+        "Description": "src/constructs/WebsiteStackTest/WebsiteStackTest.lambda.ts",
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "URL": "https:test-us-east-1.matthewbonig.com",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "UrlPingTestWebsiteStackTestFunctionServiceRole15EF1E4A",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "UrlPingTestWebsiteStackTestFunctionCurrentVersionB2F14C76cc9bdb3181fb0758cf8605dbec4873fe": {
+      "DependsOn": [
+        "ServiceDNS57754DD9",
+        "ServiceLBPublicListenerECSGroup0CC8688C",
+        "ServiceLBPublicListener46709EAA",
+        "ServiceLBPublicRedirectListenerF055B333",
+        "ServiceLBE9A1ADBC",
+        "ServiceLBSecurityGroupF7435A5C",
+        "ServiceLBSecurityGrouptotestServiceSecurityGroup5150CB513000DAF9066D",
+        "ServiceSecurityGroupfromtestServiceLBSecurityGroup070396493000AE530363",
+        "ServiceSecurityGroupEEA09B68",
+        "Service9571FDD8",
+        "ServiceTaskDefExecutionRoleDefaultPolicy3073559D",
+        "ServiceTaskDefExecutionRole919F7BE3",
+        "ServiceTaskDef1922A00F",
+        "ServiceTaskDefTaskRoleDefaultPolicy9CCB4F8E",
+        "ServiceTaskDefTaskRole0CFE2F57",
+        "ServiceTaskDefwebLogGroup2A898F61",
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Ref": "UrlPingTestWebsiteStackTestFunction396DF0FE",
+        },
+      },
+      "Type": "AWS::Lambda::Version",
+    },
+    "UrlPingTestWebsiteStackTestFunctionServiceRole15EF1E4A": {
+      "DependsOn": [
+        "ServiceDNS57754DD9",
+        "ServiceLBPublicListenerECSGroup0CC8688C",
+        "ServiceLBPublicListener46709EAA",
+        "ServiceLBPublicRedirectListenerF055B333",
+        "ServiceLBE9A1ADBC",
+        "ServiceLBSecurityGroupF7435A5C",
+        "ServiceLBSecurityGrouptotestServiceSecurityGroup5150CB513000DAF9066D",
+        "ServiceSecurityGroupfromtestServiceLBSecurityGroup070396493000AE530363",
+        "ServiceSecurityGroupEEA09B68",
+        "Service9571FDD8",
+        "ServiceTaskDefExecutionRoleDefaultPolicy3073559D",
+        "ServiceTaskDefExecutionRole919F7BE3",
+        "ServiceTaskDef1922A00F",
+        "ServiceTaskDefTaskRoleDefaultPolicy9CCB4F8E",
+        "ServiceTaskDefTaskRole0CFE2F57",
+        "ServiceTaskDefwebLogGroup2A898F61",
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "role",
+            "Value": "website",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

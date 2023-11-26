@@ -1,0 +1,11 @@
+{
+  "stackName": "ProdSecondary-Database",
+  "resources": [
+    "AWS::IAM::Role",
+    "AWS::IAM::Policy",
+    "AWS::Lambda::Function",
+    "AWS::Lambda::EventSourceMapping",
+    "AWS::DynamoDB::GlobalTable",
+    "AWS::CDK::Metadata"
+  ]
+}

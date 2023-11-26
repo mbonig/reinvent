@@ -1,0 +1,27 @@
+{
+  "stackName": "ProdSecondary-Vpc",
+  "resources": [
+    "AWS::EC2::VPC",
+    "AWS::EC2::Subnet",
+    "AWS::EC2::RouteTable",
+    "AWS::EC2::SubnetRouteTableAssociation",
+    "AWS::EC2::Route",
+    "AWS::EC2::EIP",
+    "AWS::EC2::NatGateway",
+    "AWS::EC2::Subnet",
+    "AWS::EC2::RouteTable",
+    "AWS::EC2::SubnetRouteTableAssociation",
+    "AWS::EC2::Route",
+    "AWS::EC2::Subnet",
+    "AWS::EC2::RouteTable",
+    "AWS::EC2::SubnetRouteTableAssociation",
+    "AWS::EC2::Route",
+    "AWS::EC2::Subnet",
+    "AWS::EC2::RouteTable",
+    "AWS::EC2::SubnetRouteTableAssociation",
+    "AWS::EC2::Route",
+    "AWS::EC2::InternetGateway",
+    "AWS::EC2::VPCGatewayAttachment",
+    "AWS::CDK::Metadata"
+  ]
+}

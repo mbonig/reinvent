@@ -1,0 +1,48 @@
+{
+  "Comment": "A description of my state machine",
+  "StartAt": "CopyObject",
+  "States": {
+    "CopyObject": {
+      "Type": "Task",
+      "Parameters": {
+        "Bucket": "MyData",
+        "CopySource": "MyData",
+        "Key": "MyData"
+      },
+      "Resource": "arn:aws:states:::aws-sdk:s3:copyObject",
+      "Next": "Wait"
+    },
+    "Wait": {
+      "Type": "Wait",
+      "Seconds": 60,
+      "Next": "GetObjectAttributes"
+    },
+    "GetObjectAttributes": {
+      "Type": "Task",
+      "Parameters": {
+        "Bucket": "MyData",
+        "Key": "MyData",
+        "ObjectAttributes": [
+          "ETag"
+        ]
+      },
+      "Resource": "arn:aws:states:::aws-sdk:s3:getObjectAttributes",
+      "Next": "DeleteObjects"
+    },
+    "DeleteObjects": {
+      "Type": "Task",
+      "End": true,
+      "Parameters": {
+        "Bucket": "MyData",
+        "Delete": {
+          "Objects": [
+            {
+              "Key": "MyData"
+            }
+          ]
+        }
+      },
+      "Resource": "arn:aws:states:::aws-sdk:s3:deleteObjects"
+    }
+  }
+}

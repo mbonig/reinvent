@@ -148,6 +148,7 @@
         "devDependencies": [
           "**/test/**",
           "**/build-tools/**",
+          "src/constructs/WebsiteStackTest/WebsiteStackTest.lambda.ts",
           ".projenrc.ts",
           "projenrc/**/*.ts"
         ],

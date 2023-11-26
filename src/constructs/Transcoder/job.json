@@ -1,0 +1,58 @@
+{
+  "OutputGroups": [
+    {
+      "Name": "File Group",
+      "Outputs": [
+        {
+          "VideoDescription": {
+            "CodecSettings": {
+              "Codec": "H_264",
+              "H264Settings": {
+                "Bitrate": 2000000,
+                "RateControlMode": "CBR",
+                "QualityTuningLevel": "SINGLE_PASS_HQ"
+              }
+            }
+          },
+          "AudioDescriptions": [
+            {
+              "AudioSourceName": "Audio Selector 1",
+              "CodecSettings": {
+                "Codec": "AAC",
+                "AacSettings": {
+                  "Bitrate": 96000,
+                  "CodingMode": "CODING_MODE_2_0",
+                  "SampleRate": 48000
+                }
+              }
+            }
+          ],
+          "ContainerSettings": {
+            "Container": "MP4",
+            "Mp4Settings": {}
+          }
+        }
+      ],
+      "OutputGroupSettings": {
+        "Type": "FILE_GROUP_SETTINGS",
+        "FileGroupSettings": {
+          "Destination": ""
+        }
+      }
+    }
+  ],
+  "Inputs": [
+    {
+      "AudioSelectors": {
+        "Audio Selector 1": {
+          "DefaultSelection": "DEFAULT"
+        }
+      },
+      "VideoSelector": {
+        "Rotate": "AUTO"
+      },
+      "TimecodeSource": "ZEROBASED",
+      "FileInput": ""
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+// For constructing animation for curve line
+@mixin curve-line-animation($xDisplacement, $yDisplacement, $uniqueIdentifier, $disappearAt: 85%, $initialSize: 48, $endSize: 24) {
+    @keyframes curve-x-axis-#{$uniqueIdentifier} {
+        0% {
+            opacity: 1;
+            font-size: $initialSize + px;
+            animation-timing-function: ease-in;
+        }
+        50% {
+            transform: translateX($xDisplacement + px);
+            animation-timing-function: ease-out;
+        }
+        #{$disappearAt} {
+            font-size: $endSize + px;
+            opacity: 0;
+        }
+        100% {
+            transform: translateX($xDisplacement * 2 + px);
+            opacity: 0;
+        }
+    }
+
+    @keyframes curve-y-axis-#{$uniqueIdentifier} {
+        0% {
+            animation-timing-function: ease-out;
+        }
+        50% {
+            transform: translateY($yDisplacement + px);
+            animation-timing-function: ease-in;
+        }
+        100% {
+            transform: translateX(0px);
+        }
+    }
+}
+// Helper for adding animation in different emoji
+@mixin textStyleHelper($identifier, $xDisplacement, $yDisplacement, $animationSpeed, $animationDelay, $color, $disappearAt: 85%, $initialSize: 48, $endSize: 24) {
+    @include curve-line-animation($xDisplacement, $yDisplacement, $identifier, $disappearAt, $initialSize, $endSize);
+    animation: curve-x-axis-#{$identifier} $animationSpeed $animationDelay infinite;
+    color: $color;
+    .text {
+        animation: curve-y-axis-#{$identifier} $animationSpeed $animationDelay infinite;
+    }
+}
+
+// Helper for random number gen
+@function r($min, $max) {
+    $rand: random();
+    $randomNum: $min + ($rand * (($max - $min)));
+    @return $randomNum;
+}
+
+$red: #f94144;
+$orange: #f3722c;
+$yellow: #f9c74f;
+$green: #90be6d;
+$blue: #577590;
+$brown: #b2967d;
+$background: #f7fff7;
+
+
+.leftBarfingContainer {
+    position: absolute;
+
+    will-change: transform;
+
+    $x-min: 50;
+    $x-max: 100;
+    $y-min: 0;
+    $y-max: -300;
+    $a-spd-min: 2;
+    $a-spd-max: 3;
+    $a-delay-min: 0;
+    $a-delay-max: 2;
+    $dis-pt-min: 70;
+    $dis-pt-max: 85;
+    $font-min: 12;
+    $font-max: 30;
+
+    .leftTextContainer {
+        & { @include textStyleHelper("left-00", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $yellow, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max)); }
+        &:nth-child(2n) { @include textStyleHelper("left-01", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $orange, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(3n) { @include textStyleHelper("left-02", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $red, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(4n) { @include textStyleHelper("left-03", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $green, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(5n) { @include textStyleHelper("left-04", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $blue, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(6n) { @include textStyleHelper("left-05", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, #aa00dd, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(7n) { @include textStyleHelper("left-06", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, #00fce2, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(8n) { @include textStyleHelper("left-07", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, #67dc0a, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(9n) { @include textStyleHelper("left-08", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, #dd0000, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(10n) { @include textStyleHelper("left-09", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, #dd00d9, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+
+    }
+}
+
+.rightBarfingContainer {
+    position: absolute;
+
+    will-change: transform;
+
+    $x-min: -50;
+    $x-max: -100;
+    $y-min: 0;
+    $y-max: -300;
+    $a-spd-min: 2;
+    $a-spd-max: 3;
+    $a-delay-min: 0;
+    $a-delay-max: 2;
+    $dis-pt-min: 70;
+    $dis-pt-max: 85;
+    $font-min: 12;
+    $font-max: 30;
+
+    .rightTextContainer {
+        & { @include textStyleHelper("right-00", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $yellow, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max)); }
+        &:nth-child(2n) { @include textStyleHelper("right-01", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $orange, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(3n) { @include textStyleHelper("right-02", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $red, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(4n) { @include textStyleHelper("right-03", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $green, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(5n) { @include textStyleHelper("right-04", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $blue, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(6n) { @include textStyleHelper("right-05", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $orange, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(7n) { @include textStyleHelper("right-06", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $red, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(8n) { @include textStyleHelper("right-07", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $green, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+        &:nth-child(9n) { @include textStyleHelper("right-08", r($x-min, $x-max), r($y-min, $y-max), r($a-spd-min, $a-spd-max) + s, r($a-delay-min, $a-delay-max) + s, $blue, percentage(r($dis-pt-min, $dis-pt-max)), r($font-min, $font-max), r($font-min, $font-max));  }
+
+    }
+}
+
+.barfingText {
+    top: 0;
+    left: 0;
+    position: absolute;
+}
+
+.textContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 100;
+    .text { position: absolute; }
+}

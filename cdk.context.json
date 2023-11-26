@@ -1,0 +1,24 @@
+{
+  "availability-zones:account=536309290949:region=us-east-1": [
+    "us-east-1a",
+    "us-east-1b",
+    "us-east-1c",
+    "us-east-1d",
+    "us-east-1e",
+    "us-east-1f"
+  ],
+  "hosted-zone:account=536309290949:domainName=matthewbonig.com:region=us-east-1": {
+    "Id": "/hostedzone/Z37L20FF1OIICK",
+    "Name": "matthewbonig.com."
+  },
+  "availability-zones:account=536309290949:region=us-west-2": [
+    "us-west-2a",
+    "us-west-2b",
+    "us-west-2c",
+    "us-west-2d"
+  ],
+  "hosted-zone:account=536309290949:domainName=matthewbonig.com:region=us-west-2": {
+    "Id": "/hostedzone/Z37L20FF1OIICK",
+    "Name": "matthewbonig.com."
+  }
+}

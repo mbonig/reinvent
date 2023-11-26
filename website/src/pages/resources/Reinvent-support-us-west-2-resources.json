@@ -1,0 +1,10 @@
+{
+  "stackName": "Reinvent-support-us-west-2",
+  "resources": [
+    "AWS::KMS::Key",
+    "AWS::KMS::Alias",
+    "AWS::S3::Bucket",
+    "AWS::S3::BucketPolicy",
+    "AWS::CDK::Metadata"
+  ]
+}

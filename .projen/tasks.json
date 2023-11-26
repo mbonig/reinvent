@@ -26,7 +26,48 @@
     },
     "bundle": {
       "name": "bundle",
-      "description": "Prepare assets"
+      "description": "Prepare assets",
+      "steps": [
+        {
+          "spawn": "bundle:constructs/WebsiteStackTest/WebsiteStackTest.lambda"
+        }
+      ]
+    },
+    "bundle:constructs/WebsiteStackTest/WebsiteStackTest.lambda": {
+      "name": "bundle:constructs/WebsiteStackTest/WebsiteStackTest.lambda",
+      "description": "Create a JavaScript bundle from src/constructs/WebsiteStackTest/WebsiteStackTest.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/constructs/WebsiteStackTest/WebsiteStackTest.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/constructs/WebsiteStackTest/WebsiteStackTest.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/*"
+        }
+      ]
+    },
+    "bundle:constructs/WebsiteStackTest/WebsiteStackTest.lambda:watch": {
+      "name": "bundle:constructs/WebsiteStackTest/WebsiteStackTest.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/constructs/WebsiteStackTest/WebsiteStackTest.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/constructs/WebsiteStackTest/WebsiteStackTest.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/constructs/WebsiteStackTest/WebsiteStackTest.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --watch"
+        }
+      ]
+    },
+    "cdk:bucketReplication": {
+      "name": "cdk:bucketReplication",
+      "steps": [
+        {
+          "exec": "cdk -a \"npx ts-node -P tsconfig.json --prefer-ts-exts src/BucketReplication.ts\"",
+          "receiveArgs": true
+        }
+      ]
+    },
+    "cdk:github": {
+      "name": "cdk:github",
+      "steps": [
+        {
+          "exec": "cdk -a \"npx ts-node -P tsconfig.json --prefer-ts-exts src/GithubSupport.ts\"",
+          "receiveArgs": true
+        }
+      ]
     },
     "clobber": {
       "name": "clobber",
@@ -123,6 +164,14 @@
         }
       ]
     },
+    "get-service-account-users": {
+      "name": "get-service-account-users",
+      "steps": [
+        {
+          "exec": "npx ts-node src/helpers/get-service-account-users.ts"
+        }
+      ]
+    },
     "install": {
       "name": "install",
       "description": "Install project dependencies and update lockfile (non-frozen)",
@@ -138,6 +187,26 @@
       "steps": [
         {
           "exec": "yarn install --check-files --frozen-lockfile"
+        }
+      ]
+    },
+    "integ": {
+      "name": "integ",
+      "description": "Run integration snapshot tests",
+      "steps": [
+        {
+          "exec": "integ-runner $@ --language typescript",
+          "receiveArgs": true
+        }
+      ]
+    },
+    "integ:update": {
+      "name": "integ:update",
+      "description": "Run and update integration snapshot tests",
+      "steps": [
+        {
+          "exec": "integ-runner $@ --language typescript --update-on-failed",
+          "receiveArgs": true
         }
       ]
     },
@@ -190,6 +259,9 @@
         },
         {
           "spawn": "eslint"
+        },
+        {
+          "spawn": "integ"
         }
       ]
     },
@@ -213,13 +285,13 @@
           "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,aws-cdk,esbuild,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest,jest-junit,npm-check-updates,projen,ts-jest,ts-node,typescript,aws-cdk-lib,constructs"
+          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,aws-cdk,esbuild,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest,jest-junit,npm-check-updates,projen,ts-jest,ts-node,typescript,@aws-cdk/aws-lambda-python-alpha,@aws-sdk/client-dynamodb,@aws-sdk/lib-dynamodb,@cdktf/aws-cdk,@matthewbonig/cdk-logical-id-mapper,@matthewbonig/state-machine,@types/uuid,@wheatstalk/cdk-intrinsic-validator,aws-cdk-github-oidc,aws-cdk-lib,aws-sdk,cdk-iam-floyd,cdk-nag,cdk-pipelines-github,constructs,datadog-cdk-constructs-v2,uuid"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk esbuild eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit npm-check-updates projen ts-jest ts-node typescript aws-cdk-lib constructs"
+          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk esbuild eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit npm-check-updates projen ts-jest ts-node typescript @aws-cdk/aws-lambda-python-alpha @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb @cdktf/aws-cdk @matthewbonig/cdk-logical-id-mapper @matthewbonig/state-machine @types/uuid @wheatstalk/cdk-intrinsic-validator aws-cdk-github-oidc aws-cdk-lib aws-sdk cdk-iam-floyd cdk-nag cdk-pipelines-github constructs datadog-cdk-constructs-v2 uuid"
         },
         {
           "exec": "npx projen"
