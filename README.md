@@ -1,4 +1,4 @@
-# Reinvent Demo CDK App
+# re:Invent 2023 Demo CDK App
 
 This is the demo application built for my talk at re:invent 2023. This is just demo-ware and is not a full-fledged application. It is meant to show how to use the AWS CDK to build a serverless application.
 
