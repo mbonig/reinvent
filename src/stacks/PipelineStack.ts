@@ -1,5 +1,4 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
-import { ContainerImage } from 'aws-cdk-lib/aws-ecs';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { CodePipeline, CodePipelineSource, DockerCredential, ShellStep } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
@@ -10,11 +9,9 @@ import { DnsStage } from '../stages/DnsStage';
 interface PipelineStackProps extends StackProps {
   replicationRoleArn: string;
   connectionArn: string;
-  websiteImageAsset: ContainerImage;
 }
 
 export type WebsiteProps = {
-  imageAsset: ContainerImage;
   websiteDomainName: string;
   replicationRoleArn: string;
 }
@@ -22,15 +19,12 @@ export type WebsiteProps = {
 export class PipelineStack extends Stack {
   constructor(scope: Construct, id: string, props: PipelineStackProps) {
     super(scope, id, props);
-    const { websiteImageAsset } = props;
 
     const devWebsiteProps: WebsiteProps = {
-      imageAsset: websiteImageAsset,
       websiteDomainName: 'reinvent-dev',
       replicationRoleArn: props.replicationRoleArn,
     };
     const prodWebsiteProps: WebsiteProps = {
-      imageAsset: websiteImageAsset,
       websiteDomainName: 'reinvent',
       replicationRoleArn: props.replicationRoleArn,
     };

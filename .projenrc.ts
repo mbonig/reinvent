@@ -3,7 +3,7 @@ import { LambdaRuntime } from 'projen/lib/awscdk';
 
 const project = new awscdk.AwsCdkTypeScriptApp({
   experimentalIntegRunner: true,
-  cdkVersion: '2.99.1',
+  cdkVersion: '2.123.0',
   defaultReleaseBranch: 'main',
   name: 'reinvent',
   projenrcTs: true,

@@ -14,7 +14,6 @@ export interface WebsiteStackProps extends StackProps {
   tablePrefix: string;
   replicationRoleArn: string;
   websiteDomainName: string;
-  imageAsset: ContainerImage;
   tables: ITableV2[];
   vpc: IVpc;
 }
@@ -51,7 +50,7 @@ export class WebsiteStack extends Stack {
       healthCheckGracePeriod: Duration.minutes(3),
       desiredCount: 2,
       taskImageOptions: {
-        image: props.imageAsset,
+        image: ContainerImage.fromAsset('website'),
         containerPort: 3000,
         environment: {
           MEDIA_BUCKET: mediaBucket.bucketName,
