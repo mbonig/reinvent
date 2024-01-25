@@ -1,4 +1,3 @@
-import path from 'path';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { Vpc } from 'aws-cdk-lib/aws-ec2';
@@ -47,9 +46,6 @@ afterAll(() => {
 test('WebsiteStack Snapshot', () => {
   // arrange
   const app = new App();
-  const websiteImageAsset = AssetImage.fromAsset(
-    path.join(__dirname, '..', 'website'),
-  );
   const testEnv = {
     account: '000011112222', region: 'us-east-1',
   };
@@ -58,7 +54,6 @@ test('WebsiteStack Snapshot', () => {
   let testStack = new Stack(app, 'VpcTestStack', { env: testEnv });
   const stack = new WebsiteStack(app, 'test', {
     env: testEnv,
-    imageAsset: websiteImageAsset,
     websiteDomainName: 'test',
     tables: [],
     tablePrefix: 'test',
