@@ -6,7 +6,6 @@ describe('DatabaseStack Snapshot', () => {
   function getTestStack(props?: Partial<DatabaseStackProps>) {
     const app = new App();
     const stack = new DatabaseStack(app, 'test', {
-      isPrimary: true,
       tablePrefix: 'test',
       env: {
         account: '000011112222',
@@ -15,21 +14,11 @@ describe('DatabaseStack Snapshot', () => {
       ...props,
     });
 
-    const assert = Template.fromStack(stack);
-    return assert;
+    return Template.fromStack(stack);
   }
 
-  test('isPrimary', () => {
+  test('matches snapshot', () => {
     const assert = getTestStack();
     expect(assert.toJSON()).toMatchSnapshot();
   });
-
-  test('isPrimary is false', () => {
-    const assert = getTestStack({
-      isPrimary: false,
-    });
-
-    expect(assert.toJSON()).toMatchSnapshot();
-  });
-
 });

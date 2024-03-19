@@ -3,7 +3,7 @@ import { Bucket, CfnBucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 
 interface ReplicatedBucketProps {
-  replicationRoleArn: string;
+  replicationRoleArn?: string;
   websiteDomainName: string;
   region: string;
 }

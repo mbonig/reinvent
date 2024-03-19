@@ -1,4 +1,3 @@
-import path from 'path';
 import { App } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 
@@ -44,9 +43,6 @@ afterAll(() => {
   fromLambdaAssetMock!.mockRestore();
 });
 
-
-const websiteImageAsset = AssetImage.fromAsset(path.join(__dirname, '..', '..', 'website'), {});
-
 test('Snapshot', () => {
   const app = new App();
   const stack = new PipelineStack(app, 'test', {
@@ -55,7 +51,6 @@ test('Snapshot', () => {
       region: 'us-east-1',
     },
     connectionArn: 'arn:aws:codestar-connections:us-east-1:000011112222:connection/8db45fc6-a823-4980-b94d-a7dcf69cfe99',
-    websiteImageAsset,
     replicationRoleArn: 'arn:aws:iam::000011112222:role/BucketReplication-ReplicationRoleCE149CEC-tZp8bWrelieK',
   });
 

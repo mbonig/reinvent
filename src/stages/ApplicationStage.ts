@@ -3,6 +3,7 @@ import { ITableV2 } from 'aws-cdk-lib/aws-dynamodb';
 import { ManualApprovalStep, StackSteps } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 import { PRIMARY_REGION } from '../constants';
+import { CdnStack } from '../stacks/CdnStack';
 import { DatabaseStack, DatabaseStackProps } from '../stacks/DatabaseStack';
 import { VideoTranscoderStack } from '../stacks/VideoTranscoderStack';
 import { VpcStack, VpcStackProps } from '../stacks/VpcStack';
@@ -45,6 +46,11 @@ export class ApplicationStage extends Stage {
       vpc: vpcStack.vpc,
     });
 
+    new CdnStack(this, 'CDN', {
+      websiteLoadBalancer: website.loadBalancer,
+      certificate: website.certificate,
+      ...props,
+    });
 
     new VideoTranscoderStack(this, 'MediaTranscoder', {
       mediaBucket: website.mediaBucket,

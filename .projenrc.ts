@@ -3,7 +3,7 @@ import { LambdaRuntime } from 'projen/lib/awscdk';
 
 const project = new awscdk.AwsCdkTypeScriptApp({
   experimentalIntegRunner: true,
-  cdkVersion: '2.123.0',
+  cdkVersion: '2.132.0',
   defaultReleaseBranch: 'main',
   name: 'reinvent',
   projenrcTs: true,
@@ -12,7 +12,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     runtime: LambdaRuntime.NODEJS_18_X,
   },
   deps: [
-    '@aws-cdk/aws-lambda-python-alpha@^2.93.0-alpha.0',
+    '@aws-cdk/aws-lambda-python-alpha@^2.132.0-alpha.0',
     '@aws-sdk/client-dynamodb',
     '@aws-sdk/lib-dynamodb',
     '@cdktf/aws-cdk',

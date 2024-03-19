@@ -40,7 +40,7 @@ exports[`WebsiteStack Snapshot 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-000011112222-us-east-1",
-          "S3Key": "ac4a1bd8c7c7879385a212db2c46b2cb8f9e23b91c993d826d478bff7dbc0af3.zip",
+          "S3Key": "9b642d28372ac0688d94d58f71770ceba997be43db88ea4b1cd0081a3ac5231e.zip",
         },
         "Handler": "__entrypoint__.handler",
         "MemorySize": 128,
@@ -329,20 +329,6 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       "DeletionPolicy": "Retain",
       "Properties": {
         "BucketName": "test-media-us-east-1",
-        "ReplicationConfiguration": {
-          "Role": "arn:aws:iam::000011112222:role/BucketReplication-ReplicationRoleCE149CEC-tZp8bWrelieK",
-          "Rules": [
-            {
-              "Destination": {
-                "Bucket": "arn:aws:s3:::test-media-us-west-2",
-                "StorageClass": "STANDARD",
-              },
-              "Id": "ConvertedReplicationRule",
-              "Prefix": "converted/",
-              "Status": "Enabled",
-            },
-          ],
-        },
         "Tags": [
           {
             "Key": "role",
@@ -696,7 +682,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             ],
             "Essential": true,
             "Image": {
-              "Fn::Sub": "000011112222.dkr.ecr.us-east-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-000011112222-us-east-1:2b6d084b7337898772c0cb04a2e159978a736b98888f0365e92210575b61a9fe",
+              "Fn::Sub": "000011112222.dkr.ecr.us-east-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-000011112222-us-east-1:7d6f3dda2c7cdcf06b0239f0938ef182cf594be46b0b94ccd934caba5ddeb566",
             },
             "LogConfiguration": {
               "LogDriver": "awslogs",
@@ -912,35 +898,6 @@ def submit_response(event: dict, context, response_status: str, error_message: s
                   ],
                 },
               ],
-            },
-            {
-              "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:GetRecords",
-                "dynamodb:GetShardIterator",
-                "dynamodb:Query",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:ConditionCheckItem",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:PutItem",
-                "dynamodb:UpdateItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:DescribeTable",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":dynamodb:us-east-1:000011112222:table/test-Heroes",
-                  ],
-                ],
-              },
             },
           ],
           "Version": "2012-10-17",
