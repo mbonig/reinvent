@@ -1562,7 +1562,7 @@ exports[`VideoTranscoderStack Snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "TesterTestsResource50798692346AC01": {
+    "TesterTestsResource399773360CAB8DA": {
       "DeletionPolicy": "Delete",
       "Properties": {
         "ServiceToken": {
